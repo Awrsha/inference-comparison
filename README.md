@@ -84,7 +84,7 @@ After downloading and extracting the code, you can use **Docker Compose** to set
 
 ```bash
 # Clone or download the code
-git clone <repository-url> inference-comparison
+git clone https://github.com/awrsha/inference-comparison.git
 cd inference-comparison
 
 # Set up with Docker
