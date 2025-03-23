@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}مقایسه سرورهای Inference - داشبورد{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-header">
+    <div class="container">
+        <h1>داشبورد تحلیلی</h1>
+        <p>نمودارها و تحلیل‌های کامل از عملکرد سرورهای مختلف استنباط</p>
+    </div>
+</section>
+
+<section class="dashboard-content">
+    <div class="container">
+        <div class="dashboard-controls">
+            <div class="dashboard-filters">
+                <div class="filter-group">
+                    <label for="time-range">بازه زمانی:</label>
+                    <select id="time-range">
+                        <option value="day">امروز</option>
+                        <option value="week" selected>هفته اخیر</option>
+                        <option value="month">ماه اخیر</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="model-type">نوع مدل:</label>
+                    <select id="model-type">
+                        <option value="all" selected>همه مدل‌ها</option>
+                        <option value="resnet50">ResNet50</option>
+                        <option value="mobilenet">MobileNet</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="refresh-dashboard" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> بروزرسانی
+            </button>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Response Time Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>میانگین زمان پاسخگویی</h3>
+                    <div class="card-controls">
+                        <button class="card-control" id="response-time-info">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="response-time-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Throughput Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>توان عملیاتی (استنباط در ثانیه)</h3>
+                    <div class="card-controls">
+                        <button class="card-control" id="throughput-info">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="throughput-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- GPU Utilization Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>استفاده از GPU</h3>
+                    <div class="card-controls">
+                        <button class="card-control" id="gpu-info">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="gpu-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Memory Usage Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>استفاده از حافظه</h3>
+                    <div class="card-controls">
+                        <button class="card-control" id="memory-info">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="memory-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detailed-stats">
+            <h3>آمار دقیق</h3>
+            
+            <div class="stats-table-container">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>سرور</th>
+                            <th>میانگین زمان (ms)</th>
+                            <th>بهترین زمان (ms)</th>
+                            <th>بدترین زمان (ms)</th>
+                            <th>توان عملیاتی (استنباط/ثانیه)</th>
+                            <th>حافظه (MB)</th>
+                            <th>استفاده از GPU (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-table-body">
+                        <!-- This will be filled dynamically -->
+                        <tr>
+                            <td>Triton</td>
+                            <td>23.5</td>
+                            <td>18.2</td>
+                            <td>42.1</td>
+                            <td>42.5</td>
+                            <td>1,240</td>
+                            <td>72%</td>
+                        </tr>
+                        <tr>
+                            <td>PyTorch</td>
+                            <td>35.8</td>
+                            <td>28.7</td>
+                            <td>65.3</td>
+                            <td>27.9</td>
+                            <td>1,850</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>TorchServe</td>
+                            <td>29.2</td>
+                            <td>22.5</td>
+                            <td>48.6</td>
+                            <td>34.2</td>
+                            <td>1,520</td>
+                            <td>78%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

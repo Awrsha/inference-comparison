@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}مقایسه سرورهای Inference - صفحه مقایسه{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/comparison.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="comparison-header">
+    <div class="container">
+        <h1>مقایسه سرورهای استنباط</h1>
+        <p>تصویر خود را آپلود کنید تا نتایج استنباط را در سرویس‌های مختلف مقایسه کنید</p>
+    </div>
+</section>
+
+<section class="upload-section">
+    <div class="container">
+        <div class="upload-container">
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3>تصویر خود را آپلود کنید</h3>
+                <p>یا روی این ناحیه کلیک کنید تا تصویر انتخاب شود</p>
+                <input type="file" id="file-input" accept="image/png, image/jpeg, image/jpg" hidden>
+            </div>
+            <div class="preview-container" id="preview-container" style="display: none;">
+                <img id="preview-image" src="" alt="Preview">
+                <div class="preview-controls">
+                    <button id="change-image" class="btn btn-secondary">تغییر تصویر</button>
+                    <button id="run-inference" class="btn btn-primary">شروع استنباط</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="results-section" id="results-section" style="display: none;">
+    <div class="container">
+        <h2>نتایج مقایسه</h2>
+        
+        <div class="server-tabs">
+            <button class="server-tab active" data-server="all">همه سرورها</button>
+            <button class="server-tab" data-server="triton">Triton</button>
+            <button class="server-tab" data-server="pytorch">PyTorch</button>
+            <button class="server-tab" data-server="torchserve">TorchServe</button>
+        </div>
+        
+        <div class="results-container">
+            <!-- Loading indicators -->
+            <div class="loading-container" id="loading-container">
+                <div class="loading-spinner"></div>
+                <p>در حال پردازش درخواست...</p>
+            </div>
+            
+            <!-- Results grid -->
+            <div class="results-grid" id="results-grid" style="display: none;">
+                <!-- Triton Results -->
+                <div class="result-card" data-server="triton">
+                    <div class="result-header">
+                        <h3>Triton Inference Server</h3>
+                        <div class="result-time">
+                            <i class="fas fa-clock"></i>
+                            <span id="triton-time">0 ms</span>
+                        </div>
+                    </div>
+                    <div class="result-body">
+                        <div class="result-predictions" id="triton-predictions">
+                            <!-- Predictions will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PyTorch Results -->
+                <div class="result-card" data-server="pytorch">
+                    <div class="result-header">
+                        <h3>PyTorch Direct</h3>
+                        <div class="result-time">
+                            <i class="fas fa-clock"></i>
+                            <span id="pytorch-time">0 ms</span>
+                        </div>
+                    </div>
+                    <div class="result-body">
+                        <div class="result-predictions" id="pytorch-predictions">
+                            <!-- Predictions will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TorchServe Results -->
+                <div class="result-card" data-server="torchserve">
+                    <div class="result-header">
+                        <h3>TorchServe</h3>
+                        <div class="result-time">
+                            <i class="fas fa-clock"></i>
+                            <span id="torchserve-time">0 ms</span>
+                        </div>
+                    </div>
+                    <div class="result-body">
+                        <div class="result-predictions" id="torchserve-predictions">
+                            <!-- Predictions will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Error message -->
+            <div class="error-message" id="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="error-text"></p>
+            </div>
+        </div>
+        
+        <div class="time-comparison" id="time-comparison" style="display: none;">
+            <h3>مقایسه زمان استنباط</h3>
+            <div class="time-bars">
+                <div class="time-bar-container">
+                    <div class="time-bar-label">Triton</div>
+                    <div class="time-bar-wrapper">
+                        <div class="time-bar" id="triton-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="time-bar-value" id="triton-bar-value">0 ms</div>
+                </div>
+                
+                <div class="time-bar-container">
+                    <div class="time-bar-label">PyTorch</div>
+                    <div class="time-bar-wrapper">
+                        <div class="time-bar" id="pytorch-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="time-bar-value" id="pytorch-bar-value">0 ms</div>
+                </div>
+                
+                <div class="time-bar-container">
+                    <div class="time-bar-label">TorchServe</div>
+                    <div class="time-bar-wrapper">
+                        <div class="time-bar" id="torchserve-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="time-bar-value" id="torchserve-bar-value">0 ms</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="benchmark-section">
+            <h3>آزمایش کارایی</h3>
+            <p>انجام آزمایش با تکرار چندباره استنباط</p>
+            
+            <div class="benchmark-controls">
+                <div class="form-group">
+                    <label for="iteration-count">تعداد تکرار:</label>
+                    <input type="number" id="iteration-count" value="10" min="1" max="100">
+                </div>
+                <button id="run-benchmark" class="btn btn-primary">شروع آزمایش</button>
+            </div>
+            
+            <div class="benchmark-results" id="benchmark-results" style="display: none;">
+                <div class="benchmark-chart-container">
+                    <canvas id="benchmark-chart"></canvas>
+                </div>
+                <div class="benchmark-summary" id="benchmark-summary">
+                    <!-- Summary will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/comparison.js') }}"></script>
+{% endblock %}

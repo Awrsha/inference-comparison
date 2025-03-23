@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}مقایسه سرورهای Inference - صفحه اصلی{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">مقایسه سرورهای <span class="gradient-text">Inference</span></h1>
+            <p class="hero-description">
+                با استفاده از این پروژه، عملکرد سرورهای مختلف استنباط هوش مصنوعی مانند Triton Inference Server را مقایسه کنید. 
+                تمام ابزار مورد نیاز از صفر تا صد برای مقایسه و ارزیابی در اختیار شماست.
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('main.comparison') }}" class="btn btn-primary">شروع مقایسه</a>
+                <a href="{{ url_for('main.about') }}" class="btn btn-secondary">اطلاعات بیشتر</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='images/hero-image.svg') }}" alt="AI Inference Comparison">
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">ویژگی‌های برجسته</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3>مقایسه چندین سرور</h3>
+                <p>عملکرد Triton Inference Server، TorchServe و PyTorch را در یک نگاه مقایسه کنید.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>نمودارهای تحلیلی</h3>
+                <p>نمودارهای دقیق زمان پاسخ، توان عملیاتی و استفاده از منابع را مشاهده کنید.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>نصب و راه‌اندازی آسان</h3>
+                <p>با داکر و اسکریپت‌های آماده، تمام محیط به سرعت آماده می‌شود.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h3>API یکپارچه</h3>
+                <p>رابط یکسان برای تعامل با همه سرورها به صورت ساده و یکپارچه.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="servers">
+    <div class="container">
+        <h2 class="section-title">سرورهای قابل مقایسه</h2>
+        <div class="servers-grid">
+            <div class="server-card">
+                <img src="{{ url_for('static', filename='images/triton-logo.png') }}" alt="Triton Inference Server" class="server-logo">
+                <h3>Triton Inference Server</h3>
+                <p>سرور استنباط قدرتمند NVIDIA با پشتیبانی از چارچوب‌های مختلف و بهینه‌سازی‌های GPU</p>
+                <a href="https://github.com/triton-inference-server/server" target="_blank" class="learn-more">اطلاعات بیشتر <i class="fas fa-arrow-left"></i></a>
+            </div>
+            
+            <div class="server-card">
+                <img src="{{ url_for('static', filename='images/torchserve-logo.png') }}" alt="TorchServe" class="server-logo">
+                <h3>TorchServe</h3>
+                <p>سرور استنباط مخصوص مدل‌های PyTorch با قابلیت مدیریت و نظارت مدل</p>
+                <a href="https://pytorch.org/serve/" target="_blank" class="learn-more">اطلاعات بیشتر <i class="fas fa-arrow-left"></i></a>
+            </div>
+            
+            <div class="server-card">
+                <img src="{{ url_for('static', filename='images/pytorch-logo.png') }}" alt="PyTorch Direct" class="server-logo">
+                <h3>PyTorch Direct</h3>
+                <p>استنباط مستقیم با استفاده از PyTorch و Flask بدون هیچ سرور واسطه</p>
+                <a href="https://pytorch.org/" target="_blank" class="learn-more">اطلاعات بیشتر <i class="fas fa-arrow-left"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>آماده مقایسه سرورهای استنباط هستید؟</h2>
+            <p>اکنون می‌توانید سرورهای مختلف را مقایسه کنید و بهترین گزینه برای پروژه خود را پیدا کنید.</p>
+            <a href="{{ url_for('main.comparison') }}" class="btn btn-primary">شروع مقایسه</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

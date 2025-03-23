@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: docker/flask.Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app/app
+      - ./models:/app/models
+      - ./data:/app/data
+    environment:
+      - TRITON_URL=triton:8000
+      - TORCHSERVE_URL=torchserve:8080
+    depends_on:
+      - triton
+      - torchserve
+
+  triton:
+    build:
+      context: .
+      dockerfile: docker/triton.Dockerfile
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    volumes:
+      - ./model_repository:/models
+    command: ["tritonserver", "--model-repository=/models", "--log-verbose=1"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  torchserve:
+    image: pytorch/torchserve:latest-gpu
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+    volumes:
+      - ./model_store:/home/model-server/model-store
+      - ./config.properties:/home/model-server/config.properties
+    command: ["torchserve", "--start", "--model-store", "/home/model-server/model-store", "--ncs"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

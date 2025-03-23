@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}مقایسه سرورهای Inference{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    <!-- Apple/Zoox style CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Additional CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('main.index') }}" class="logo">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo">
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('main.index') }}" class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}">خانه</a>
+                <a href="{{ url_for('main.comparison') }}" class="nav-link {% if request.endpoint == 'main.comparison' %}active{% endif %}">مقایسه</a>
+                <a href="{{ url_for('main.dashboard') }}" class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">داشبورد</a>
+                <a href="{{ url_for('main.about') }}" class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}">درباره</a>
+            </div>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo">
+                    <p>مقایسه‌ سرورهای استنباط هوش مصنوعی</p>
+                </div>
+                <div class="footer-links">
+                    <h3>لینک‌های مفید</h3>
+                    <a href="{{ url_for('main.index') }}">خانه</a>
+                    <a href="{{ url_for('main.comparison') }}">مقایسه</a>
+                    <a href="{{ url_for('main.dashboard') }}">داشبورد</a>
+                    <a href="{{ url_for('main.about') }}">درباره</a>
+                </div>
+                <div class="footer-links">
+                    <h3>منابع</h3>
+                    <a href="https://github.com/triton-inference-server/server" target="_blank">Triton Inference Server</a>
+                    <a href="https://pytorch.org/serve/" target="_blank">TorchServe</a>
+                    <a href="https://pytorch.org/" target="_blank">PyTorch</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; ۱۴۰۲ - تمام حقوق محفوظ است</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- Additional JS -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

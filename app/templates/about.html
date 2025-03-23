@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}مقایسه سرورهای Inference - درباره{% endblock %}
+
+{% block content %}
+<section class="about-header">
+    <div class="container">
+        <h1>درباره پروژه</h1>
+        <p>اطلاعات بیشتر درباره پروژه مقایسه سرورهای استنباط</p>
+    </div>
+</section>
+
+<section class="about-content">
+    <div class="container">
+        <div class="about-section">
+            <h2>هدف پروژه</h2>
+            <p>
+                هدف اصلی این پروژه، ایجاد یک ابزار مقایسه‌ای جامع برای ارزیابی عملکرد سرورهای استنباط هوش مصنوعی است. 
+                با استفاده از این ابزار، کاربران می‌توانند به راحتی Triton Inference Server، TorchServe، و سایر راه‌حل‌های استنباط را از نظر زمان پاسخگویی، توان عملیاتی و استفاده از منابع مقایسه کنند.
+            </p>
+            <p>
+                این پروژه به شکلی طراحی شده که از صفر تا صد فرآیند استنباط را پوشش می‌دهد - از دانلود مدل‌های پیش‌آموزش دیده، راه‌اندازی سرورها، تا استنباط و ارزیابی نتایج.
+            </p>
+        </div>
+        
+        <div class="about-section">
+            <h2>معرفی سرورهای استنباط</h2>
+            
+            <div class="server-info">
+                <h3>Triton Inference Server</h3>
+                <p>
+                    Triton Inference Server یک سرور استنباط قدرتمند توسعه یافته توسط NVIDIA است که امکان استقرار مدل‌های هوش مصنوعی را در محیط‌های تولیدی فراهم می‌کند. این سرور از چارچوب‌های مختلف مانند TensorFlow، PyTorch، ONNX و TensorRT پشتیبانی می‌کند.
+                </p>
+                <p>
+                    ویژگی‌های کلیدی:
+                </p>
+                <ul>
+                    <li>پشتیبانی از چندین چارچوب یادگیری ماشین</li>
+                    <li>بهینه‌سازی‌های GPU برای حداکثر کارایی</li>
+                    <li>پردازش دسته‌ای دینامیک</li>
+                    <li>مقیاس‌پذیری و پایش</li>
+                </ul>
+            </div>
+            
+            <div class="server-info">
+                <h3>TorchServe</h3>
+                <p>
+                    TorchServe یک سرور استنباط انعطاف‌پذیر برای مدل‌های PyTorch است. این سرور توسط تیم PyTorch با همکاری AWS توسعه یافته و امکان ارائه مدل‌های PyTorch را با یک API ساده فراهم می‌کند.
+                </p>
+                <p>
+                    ویژگی‌های کلیدی:
+                </p>
+                <ul>
+                    <li>مدیریت چرخه حیات مدل</li>
+                    <li>متریک‌های جامع برای نظارت</li>
+                    <li>ویژگی‌های گسترش‌پذیر با استفاده از ماژول‌های سفارشی</li>
+                    <li>پشتیبانی از A/B تست</li>
+                </ul>
+            </div>
+            
+            <div class="server-info">
+                <h3>PyTorch Direct</h3>
+                <p>
+                    این روش از PyTorch به صورت مستقیم برای استنباط استفاده می‌کند، بدون هیچ لایه واسط اضافی. این روش ساده‌ترین پیاده‌سازی است که سربار کمتری دارد، اما مقیاس‌پذیری و ویژگی‌های مدیریتی کمتری را ارائه می‌دهد.
+                </p>
+                <p>
+                    ویژگی‌های کلیدی:
+                </p>
+                <ul>
+                    <li>سادگی پیاده‌سازی</li>
+                    <li>سربار کمتر برای استنباط تکی</li>
+                    <li>دسترسی مستقیم به API های PyTorch</li>
+                    <li>مناسب برای توسعه و آزمایش</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>معیارهای مقایسه</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>زمان پاسخگویی</h3>
+                    <p>متوسط زمان لازم برای یک استنباط کامل از دریافت درخواست تا ارسال پاسخ</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>توان عملیاتی</h3>
+                    <p>تعداد استنباط‌هایی که می‌توان در واحد زمان (معمولاً یک ثانیه) پردازش کرد</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>استفاده از GPU</h3>
+                    <p>میزان استفاده از منابع GPU هنگام اجرای استنباط</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-memory"></i>
+                    </div>
+                    <h3>استفاده از حافظه</h3>
+                    <p>میزان حافظه مصرفی برای نگهداری مدل و پردازش درخواست‌ها</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>تکنولوژی‌های استفاده شده</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <img src="{{ url_for('static', filename='images/python-logo.png') }}" alt="Python">
+                    <h3>Python</h3>
+                    <p>زبان اصلی برنامه‌نویسی برای پیاده‌سازی سرور و کلاینت‌ها</p>
+                </div>
+                
+                <div class="tech-item">
+                    <img src="{{ url_for('static', filename='images/flask-logo.png') }}" alt="Flask">
+                    <h3>Flask</h3>
+                    <p>فریم‌ورک وب سبک برای ایجاد رابط کاربری و APIها</p>
+                </div>
+                
+                <div class="tech-item">
+                    <img src="{{ url_for('static', filename='images/docker-logo.png') }}" alt="Docker">
+                    <h3>Docker</h3>
+                    <p>مجازی‌سازی سبک برای راه‌اندازی سرورهای مختلف</p>
+                </div>
+                
+                <div class="tech-item">
+                    <img src="{{ url_for('static', filename='images/pytorch-logo.png') }}" alt="PyTorch">
+                    <h3>PyTorch</h3>
+                    <p>کتابخانه یادگیری ماشین برای کار با مدل‌ها</p>
+                </div>
+                
+                <div class="tech-item">
+                    <img src="{{ url_for('static', filename='images/triton-logo.png') }}" alt="Triton">
+                    <h3>Triton Inference Server</h3>
+                    <p>سرور استنباط NVIDIA برای کارایی بالا</p>
+                </div>
+                
+                <div class="tech-item">
+                    <img src="{{ url_for('static', filename='images/torchserve-logo.png') }}" alt="TorchServe">
+                    <h3>TorchServe</h3>
+                    <p>سرور استنباط برای مدل‌های PyTorch</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
