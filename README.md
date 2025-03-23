@@ -76,6 +76,150 @@ flowchart TD
 -   16GB RAM recommended for full stack deployment
 -   NVIDIA Container Toolkit (for GPU passthrough)
 
+# User Guide and Setup Instructions
+
+## Setup with Docker (Recommended)
+
+After downloading and extracting the code, you can use **Docker Compose** to set up the entire environment:
+
+```bash
+# Clone or download the code
+git clone <repository-url> inference-comparison
+cd inference-comparison
+
+# Set up with Docker
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
+
+After setup, you can access the application at: http://localhost:5000
+
+## Setup without Docker
+
+If you don't want to use **Docker**, you'll need to install and configure each service separately.
+
+### 1. Install Triton Inference Server
+
+✅ **Option 1:** Follow the official Triton Inference Server guide  
+✅ **Option 2:** Use the Docker version:
+
+```bash
+docker run --gpus=all -p 8000:8000 -p 8001:8001 -p 8002:8002 \
+  -v ${PWD}/model_repository:/models nvcr.io/nvidia/tritonserver:22.07-py3 \
+  tritonserver --model-repository=/models
+```
+
+### 2. Install TorchServe
+
+✅ **Option 1:** Follow the official TorchServe guide  
+✅ **Option 2:** Use the Docker version:
+
+```bash
+docker run -p 8080:8080 -p 8081:8081 -p 8082:8082 \
+  -v ${PWD}/model_store:/home/model-server/model-store pytorch/torchserve
+```
+
+### 3. Set Up Flask Server
+
+To set up the Flask server, follow these steps:
+
+```bash
+pip install -r requirements.txt
+python scripts/download_models.py
+python run.py
+```
+
+✅ Now you can go to **http://localhost:5000** and use the service.
+
+## Detailed Setup Instructions
+
+### Docker Setup (Recommended)
+
+**1. Clone the repository:**
+
+```bash
+git clone https://github.com/awrsha/inference-comparison.git
+cd inference-comparison
+```
+
+**2. Start with Docker Compose:**
+
+```bash
+docker-compose up -d
+```
+
+**3. Check service status:**
+
+```bash
+docker-compose ps
+```
+
+✅ **The application will be available at:** http://localhost:5000
+
+**4. Stop services:**
+
+```bash
+docker-compose down
+```
+
+### Manual Installation (Without Docker)
+
+**1. Install prerequisites:**
+
+```bash
+pip install -r requirements.txt
+```
+
+**2. Download models:**
+
+```bash
+python scripts/download_models.py
+```
+
+**3. Start Triton Inference Server (in a separate terminal):**
+
+✅ **Option 1: Local execution**
+
+```bash
+tritonserver --model-repository=./model_repository
+```
+
+✅ **Option 2: Using Docker**
+
+```bash
+docker run --gpus=all -p 8000:8000 -p 8001:8001 -p 8002:8002 \
+  -v ${PWD}/model_repository:/models nvcr.io/nvidia/tritonserver:22.07-py3 \
+  tritonserver --model-repository=/models
+```
+
+**4. Start TorchServe (in a separate terminal):**
+
+✅ **Option 1: Local execution**
+
+```bash
+torchserve --start --model-store ./model_store --ncs
+```
+
+✅ **Option 2: Using Docker**
+
+```bash
+docker run -p 8080:8080 -p 8081:8081 -p 8082:8082 \
+  -v ${PWD}/model_store:/home/model-server/model-store pytorch/torchserve
+```
+
+**5. Start Flask server:**
+
+```bash
+python run.py
+```
+
+✅ **The application will be available at:** http://localhost:5000
+
 # 📊 Performance Metrics
 
 | Metric | Triton | TorchServe | PyTorch |
